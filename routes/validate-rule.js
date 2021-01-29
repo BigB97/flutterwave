@@ -14,7 +14,6 @@ router.post('/', checkPayload, async (req, res) => {
   try {
     // Destructure payload
     const { data, rule } = req.body;
-    console.log(data);
     // check if fields are properly received
     const isRequired = await checkSubField(rule);
 
@@ -69,8 +68,7 @@ router.post('/', checkPayload, async (req, res) => {
         );
     }
   } catch (error) {
-    console.log(error);
-    return res.status(400).json(error);
+    return res.status(400).json(`Server Error`);
   }
 });
 
