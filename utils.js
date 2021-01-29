@@ -1,4 +1,4 @@
-const message = require('./custom-message');
+const { errMsg } = require('./custom-message');
 const payloadChecker = require('payload-validator');
 const ePayload = {
   rule: {},
@@ -7,17 +7,16 @@ const ePayload = {
 
 function checkPayload(req, res, next) {
   if (typeof req.body != 'object')
-    return res.status(400).json(message(`Invalid JSON payload passed.`));
+    return res.status(400).json(errMsg(`Invalid JSON payload passed.`));
   const result = payloadChecker.validator(
     req.body,
     ePayload,
     ['rule', 'data'],
     false
   );
-  console.log(result);
   if (result.success === true) return next();
   if (result.success === false)
-    return res.status(400).json(message(result.response.errorMessage));
+    return res.status(400).json(errMsg(result.response.errorMessage));
   next();
 }
 
@@ -35,8 +34,6 @@ function find(obj, str) {
 }
 
 function validate(data, input, con, conValue) {
-  console.log(input, con, conValue);
-  //   const fields = data.fields;
   if (con == 'eq') {
     if (input === conValue) {
       return {

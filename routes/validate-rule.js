@@ -10,63 +10,63 @@ const ePayload = {
   data: {},
 };
 
-/* GET users listing. */
 router.post('/', checkPayload, async (req, res) => {
-  const { data, rule } = req.body;
   try {
+    // Destructure payload
+    const { data, rule } = req.body;
+
+    // check if fields are properly received
     const isRequired = await checkSubField(rule);
+
+    // if field is not found in payload send error message
     if (isRequired != undefined || null || '')
       return res.status(400).json(errMsg(isRequired));
-    // console.log(found);
-    if (rule.fields.includes('.')) {
-      const splitString = rule.fields.split('.');
-      // console.log(splitString);
-      const fText = splitString[0];
-      const lText = splitString[1];
-      const ischeck = data.hasOwnProperty(fText);
-      if (ischeck) {
-        const isfound = find(data, rule.fields);
-        if (isfound == undefined || null || '') {
-          return res
-            .status(400)
-            .json(
-              errMsg(`field '${lText}' in '${fText}' is missing from data.`)
-            );
-        }
-        const isvalidated = validate(
-          rule,
-          isfound,
-          rule.conditions,
-          rule.condition_values
+
+    // Get the value of the rule.field in "Data" paylad
+    const isValue = find(data, rule.fields);
+    const splitString = rule.fields.split('.');
+    const fText = splitString[1];
+    if (isValue == undefined || null || '') {
+      return res
+        .status(400)
+        .json(errMsg(`field '${fText}' is missing from data.`));
+    }
+
+    // After geting the value of the field, let's do some validation
+    const isvalidated = validate(
+      rule,
+      isValue,
+      rule.conditions,
+      rule.condition_values
+    );
+
+    // check validation status and send error or sucess message
+    if (isvalidated.status === 400) {
+      return res
+        .status(400)
+        .json(
+          successMsg(
+            `field ${isvalidated.data.fields} failed validation.`,
+            'error',
+            true,
+            isvalidated.data,
+            isvalidated.input
+          )
         );
-        console.log(isvalidated);
-        if (isvalidated.status === 400) {
-          return res
-            .status(400)
-            .json(
-              successMsg(
-                `field ${isvalidated.data.fields} failed validation.`,
-                'error',
-                true,
-                isvalidated.data,
-                isvalidated.input
-              )
-            );
-        }
-        if (isvalidated.status == 200) {
-          return res
-            .status(200)
-            .json(
-              successMsg(
-                `field ${isvalidated.data.fields} successfully validated.`,
-                'error',
-                true,
-                isvalidated.data,
-                isvalidated.input
-              )
-            );
-        }
-      }
+    }
+
+    if (isvalidated.status == 200) {
+      return res
+        .status(200)
+        .json(
+          successMsg(
+            `field ${isvalidated.data.fields} successfully validated.`,
+            'success',
+            false,
+            isvalidated.data,
+            isvalidated.input
+          )
+        );
     }
   } catch (error) {
     console.log(error);
