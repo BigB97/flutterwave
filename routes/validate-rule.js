@@ -14,7 +14,7 @@ router.post('/', checkPayload, async (req, res) => {
   try {
     // Destructure payload
     const { data, rule } = req.body;
-
+    console.log(data);
     // check if fields are properly received
     const isRequired = await checkSubField(rule);
 
@@ -23,8 +23,8 @@ router.post('/', checkPayload, async (req, res) => {
       return res.status(400).json(errMsg(isRequired));
 
     // Get the value of the rule.field in "Data" paylad
-    const isValue = find(data, rule.fields);
-    const splitString = rule.fields.split('.');
+    const isValue = find(data, rule.field);
+    const splitString = rule.field.split('.');
     const fText = splitString[1];
     if (isValue == undefined || null || '') {
       return res
@@ -36,8 +36,8 @@ router.post('/', checkPayload, async (req, res) => {
     const isvalidated = validate(
       rule,
       isValue,
-      rule.conditions,
-      rule.condition_values
+      rule.condition,
+      rule.condition_value
     );
 
     // check validation status and send error or sucess message
@@ -46,7 +46,7 @@ router.post('/', checkPayload, async (req, res) => {
         .status(400)
         .json(
           successMsg(
-            `field ${isvalidated.data.fields} failed validation.`,
+            `field ${isvalidated.data.field} failed validation.`,
             'error',
             true,
             isvalidated.data,
@@ -60,7 +60,7 @@ router.post('/', checkPayload, async (req, res) => {
         .status(200)
         .json(
           successMsg(
-            `field ${isvalidated.data.fields} successfully validated.`,
+            `field ${isvalidated.data.field} successfully validated.`,
             'success',
             false,
             isvalidated.data,

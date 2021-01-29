@@ -21,9 +21,9 @@ function checkPayload(req, res, next) {
 }
 
 function checkSubField(field) {
-  if (!field.fields) return `field 'field' is missing from data`;
-  if (!field.conditions) return `field condition is missing from data`;
-  if (!field.condition_values)
+  if (!field.field) return `field 'field' is missing from data`;
+  if (!field.condition) return `field condition is missing from data`;
+  if (!field.condition_value)
     return `field condition_value is missing from data`;
 }
 
