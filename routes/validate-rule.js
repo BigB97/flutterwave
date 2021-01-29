@@ -14,6 +14,9 @@ router.post('/', checkPayload, async (req, res) => {
   try {
     // Destructure payload
     const { data, rule } = req.body;
+    // Check if data comes with payload
+    if (!data) return res.status(400).json(errMsg(`data is required.`));
+
     // check if fields are properly received
     const isRequired = await checkSubField(rule);
 
@@ -24,7 +27,7 @@ router.post('/', checkPayload, async (req, res) => {
     // Get the value of the rule.field in "Data" paylad
     const isValue = find(data, rule.field);
     const splitString = rule.field.split('.');
-    const fText = splitString[1];
+    const fText = splitString[0];
     if (isValue == undefined || null || '') {
       return res
         .status(400)
