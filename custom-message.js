@@ -20,10 +20,10 @@ function successMsg(message, success, error, field, value) {
     data: {
       validation: {
         error: error || false,
-        field: field.field,
-        field_value: value,
-        condition: field.condition,
-        condition_value: field.condition_value,
+        field: field.fields || '',
+        field_value: value || '',
+        condition: field.conditions || '',
+        condition_value: field.condition_values || '',
       },
     },
   };

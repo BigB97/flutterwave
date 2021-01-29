@@ -33,16 +33,39 @@ router.post('/', checkPayload, async (req, res) => {
               errMsg(`field '${lText}' in '${fText}' is missing from data.`)
             );
         }
-        const calcu = await validate(
-          req.body,
+        const isvalidated = validate(
+          rule,
           isfound,
           rule.conditions,
           rule.condition_values
         );
-        console.log(calcu);
-        // console.log('reff', found);
-        // console.log('DTATA', data);
-        // const find2 = data..hasOwnProperty(lText);
+        console.log(isvalidated);
+        if (isvalidated.status === 400) {
+          return res
+            .status(400)
+            .json(
+              successMsg(
+                `field ${isvalidated.data.fields} failed validation.`,
+                'error',
+                true,
+                isvalidated.data,
+                isvalidated.input
+              )
+            );
+        }
+        if (isvalidated.status == 200) {
+          return res
+            .status(200)
+            .json(
+              successMsg(
+                `field ${isvalidated.data.fields} successfully validated.`,
+                'error',
+                true,
+                isvalidated.data,
+                isvalidated.input
+              )
+            );
+        }
       }
     }
   } catch (error) {

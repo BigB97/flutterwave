@@ -36,24 +36,85 @@ function find(obj, str) {
 
 function validate(data, input, con, conValue) {
   console.log(input, con, conValue);
-  console.log(data.rule.fields);
+  //   const fields = data.fields;
   if (con == 'eq') {
-    console.log(input, conValue);
     if (input === conValue) {
-      const val = {
-        message: `field ${data.rule.fields} successfully validated.`,
-        status: 'success',
-        data: {
-          validation: {
-            error: false,
-            field: data.rule.fields,
-            field_value: input,
-            condition: data.rule.conditions,
-            condition_value: data.rule.condition_values,
-          },
-        },
+      return {
+        status: 200,
+        data,
+        input,
       };
-      console.log(val);
+    } else {
+      return {
+        status: 400,
+        data,
+        input,
+      };
+    }
+  }
+
+  if (con == 'neq') {
+    if (input !== conValue) {
+      return {
+        status: 200,
+        data,
+        input,
+      };
+    } else {
+      return {
+        status: 400,
+        data,
+        input,
+      };
+    }
+  }
+
+  if (con == 'gt') {
+    if (input > conValue) {
+      return {
+        status: 200,
+        data,
+        input,
+      };
+    } else {
+      return {
+        status: 400,
+        data,
+        input,
+      };
+    }
+  }
+  if (con == 'gte') {
+    if (input >= conValue) {
+      return {
+        status: 200,
+        data,
+        input,
+      };
+    } else {
+      return {
+        status: 400,
+        data,
+        input,
+      };
+    }
+  }
+
+  if (con == 'contains') {
+    const ttt = input.toString().indexOf(`${conValue.toString()}`) > -1; //return true or false - contains or not
+    console.log(ttt);
+    if (ttt) {
+      return {
+        status: 200,
+        data,
+        input,
+      };
+    } else {
+      return {
+        status: 400,
+        data,
+        input,
+      };
     }
   }
 }
