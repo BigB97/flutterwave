@@ -2,12 +2,13 @@ const { errMsg } = require('./custom-message');
 const payloadChecker = require('payload-validator');
 const ePayload = {
   rule: {},
-  data: {},
+  data: {} || [] || '',
 };
 
 function checkPayload(req, res, next) {
   if (typeof req.body != 'object')
     return res.status(400).json(errMsg(`Invalid JSON payload passed.`));
+  
   const result = payloadChecker.validator(
     req.body,
     ePayload,
