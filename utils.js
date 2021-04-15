@@ -92,7 +92,7 @@ function validate(data, input, con, conValue) {
   }
 
   if (con == 'contains') {
-    const ttt = input.toString().indexOf(`${conValue.toString()}`) > -1; //return true or false - contains or not
+    const ttt = input.toString().indexOf(`${conValue.toString()}`) > -1; //return true or false contains or not
     if (ttt) {
       return {
         status: 200,
