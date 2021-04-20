@@ -1,5 +1,5 @@
 const { errMsg } = require('./custom-message');
-const payloadChecker = require('payload-validator');
+// const payloadChecker = require('payload-validator');
 const ePayload = {
   rule: {},
 };
