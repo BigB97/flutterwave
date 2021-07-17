@@ -112,5 +112,5 @@ module.exports = {
   checkPayload,
   checkSubField,
   find,
-  validate,
+  validate
 };
